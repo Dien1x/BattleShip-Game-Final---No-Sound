@@ -24,21 +24,31 @@ def create_ship_button(topwindow1, player):
     """
     Τοποθέτηση πλοίου.
 
+    topwindow1 = Το παράθυρο το οποίο περιέχει όλα τα διαθέσιμα προς εισαγωγή πλοια
+    player = Το αντικειμενο που περιέχει όλες τις πληροφορίες για τον παίχτη
+
     Μία συνάρτηση η οποία τοποθετεί πλοία στο ταμπλό.
     """
 
+    # Αρχικά ελέγχουμε αν έχει τοποθετηθεί κάθε ένα απο τα πλοία και αν έχει όντως τοποθετηθει
+    # κάποιο από αυτά τότε απενεργοποιούμε το κουμπί που κάνει την εισαγωγή τους.
+
+    # Για το aircraft_carrier
     if not player.aircraft_carrier["position"]:
         topwindow1.nametowidget("frame_choose_ship.aircraft_carrier_add").config(state=NORMAL)
     else:
         topwindow1.nametowidget("frame_choose_ship.aircraft_carrier_add").config(state=DISABLED)
+    # Για το battleship
     if not player.battleship["position"]:
         topwindow1.nametowidget("frame_choose_ship.battleship_add").config(state=NORMAL)
     else:
         topwindow1.nametowidget("frame_choose_ship.battleship_add").config(state=DISABLED)
+    # Για το cruiser
     if not player.cruiser["position"]:
         topwindow1.nametowidget("frame_choose_ship.cruiser_add").config(state=NORMAL)
     else:
         topwindow1.nametowidget("frame_choose_ship.cruiser_add").config(state=DISABLED)
+    # Για το destroyer
     if not player.destroyer["position"]:
         topwindow1.nametowidget("frame_choose_ship.destroyer_add").config(state=NORMAL)
     else:
@@ -56,6 +66,15 @@ def choose_ship_length(window, topwindow1, topwindow2, player, length):
     """
     Επιλογή μεγέθους πλοίου.
 
+    window = Το κύριο παράθυρο του παιχνιδιού.
+    topwindow1 = Το παράθυρο το οποίο περιέχει όλα τα διαθέσιμα προς εισαγωγή πλοια
+    topwindow2 = Το παράθυρο το οποίο έχει την επιλογή κατυεύθηνσης
+    player = Το αντικειμενο που περιέχει όλες τις πληροφορίες για τον παίχτη
+    length = Το μήκος του πλοίου που χρειαζόμαστε το οποίο δίνεται σε self.AIRCRAFT_CARRIER = 5
+                                                                      self.BATTLESHIP = 4
+                                                                      self.CRUISER = 3
+                                                                      self.DESTROYER = 2
+    
     Μία συνάρτηση η οποία αφού γινει η επιλογή του μεγέθους πλοίου, διμηουγει συναρτήσεις
     για κάθε κουμπί του ταμπλό ξεχωριστά.
     """
@@ -68,7 +87,26 @@ def choose_ship_length(window, topwindow1, topwindow2, player, length):
     player.current_length = length
 
     def head(x, y, window, topwindow2, player):
+        """
+        Η συνάρτηση head επιστρέφει μία συνάρτηση
+
+        Τα x και y θα αλλάζουν ανάλογα με τα ορίσματα που θα τις δίνονται.
+        Τα ορίσματα window, topwindow2 και player παραμένουν σταθερά και τα παιρνει
+        απο τη συνάρτηση choose_ship_length.
+
+        Τελικά η συνάρτηση αυτή επιστρέφει μία άλλη συνάρτηση η οποία θα δέχεται
+        όλα τα ορίσματα τις head και θα έχει σταθερά αλλα διαφορετικά για κάθε κλήση
+        της head x και y.
+        """
+        
         def choose_ship_head():
+            """
+            Η συνάρτηση αυτή ειναι μία σταθερή επιστρεφόμενη τιμή της head η οποία θα
+            δίνεται σε κάθε κουμπί το οποίο έχει να κάνει με τοποθέτηση πλοίων στο ταμπλό
+            και θα κάνει την ίδια κάθε φορά δουλειά για τις διάφορες συντεταγμένες που
+            έχουν τα διάφορα κουμπιά μέσα στο ταμπλό.
+            """
+            
             player.current_head = [x, y]
 
             if not player.check_in_direction(player.current_head, "up", player.current_length):
@@ -96,7 +134,8 @@ def choose_ship_length(window, topwindow1, topwindow2, player, length):
             topwindow2.grab_set()
         return choose_ship_head
        
-        
+
+    # Για κάθε κουμπί με διαφορετικό x και y δίνεται και η ανάλογη συνάρτηση.
     for y in range(11):
         for x in range(10):
             ship = head(x, y, window, topwindow2, player)
@@ -106,6 +145,10 @@ def choose_ship_length(window, topwindow1, topwindow2, player, length):
 def cancel_direction(window, player, topwindow2):
     """
     Συνάρτηση που ακυρώνει την καταχώρηση κατευθηνσης.
+
+    window = Το κύριο παράθυρο του παιχνιδιού.
+    player = Το αντικειμενο που περιέχει όλες τις πληροφορίες για τον παίχτη
+    topwindow2 = Το παράθυρο το οποίο έχει την επιλογή κατυεύθηνσης
     """
 
     check_buttons(window, player)
@@ -118,6 +161,12 @@ def choose_ship_direction(window, topwindow2, player, direction, ship_color):
     """
     Επιλογή κατεύθηνσης πλοίου.
 
+    window = Το κύριο παράθυρο του παιχνιδιού.
+    topwindow2 = Το παράθυρο το οποίο έχει την επιλογή κατυεύθηνσης
+    player = Το αντικειμενο που περιέχει όλες τις πληροφορίες για τον παίχτη
+    direction = με την κατεύθηνση που θέλουμε μέσα σε ""
+    ship_color = είναι η εικόνα που θα έχει το κάθε πλοίο που θα τοποθετειται στο ταμπλό
+    
     Μία συνάρτηση η οποία αφού γινει η επιλογή του μεγέθους πλοίου και διμηουγηθούν συναρτήσεις
     για κάθε κουμπί του ταμπλό ξεχωριστά, επιλέγει την καυεύθηνση του.
     """
@@ -127,6 +176,11 @@ def choose_ship_direction(window, topwindow2, player, direction, ship_color):
     
 
     # Επιλογή πλοίου.
+    # Το current_length ειναι μία μεταβλητή η οποία έχει διμηουργηθεί
+    # στη συνάρτηση choose_ship_length
+    topwindow1 = Το παράθυρο το οποίο περιέχει όλα τα διαθέσιμα προς εισαγωγή πλοια
+    topwindow2 = Το παράθυρο το οποίο έχει την επιλογή κατυεύθηνσης
+    player = Το αντικειμενο που περιέχει όλες τις πληροφορίες για τον παίχτη
     if player.current_length == player.AIRCRAFT_CARRIER:
         some_ship = player.aircraft_carrier
     elif player.current_length == player.BATTLESHIP:
@@ -156,10 +210,14 @@ def choose_ship_direction(window, topwindow2, player, direction, ship_color):
 def remove_ship(topwindow3, player):
     """
     Aφαιρεση πλοίου.
+    
+    topwindow3 = Το παράθυρο το οποίο περιέχει όλα τα διαθέσιμα προς διαγραφή πλοια
+    player = Το αντικειμενο που περιέχει όλες τις πληροφορίες για τον παίχτη
 
     Μία συνάρτηση η οποία ανοίγει ένα παράθυρο με σκοπό να αφαιρει πλοία από το ταμπλό.
     """
 
+    # Δουλεύει ακριβώ όμοια με την create_ship_button
     if player.aircraft_carrier["position"]:
         topwindow3.nametowidget("frame_remove_ship.aircraft_carrier_remove").config(state=NORMAL)
     else:
@@ -189,7 +247,18 @@ def remove(window, topwindow3, player, length, sea_image, ship_image):
     """
     Aφαιρεση πλοίου.
 
-    Μία συνάρτηση η οποία αφαιρει πλοία από το ταμπλό.
+    window = Το κύριο παράθυρο του παιχνιδιού.
+    topwindow3 = Το παράθυρο το οποίο περιέχει όλα τα διαθέσιμα προς διαγραφή πλοια
+    player = Το αντικειμενο που περιέχει όλες τις πληροφορίες για τον παίχτη
+    length = Το μήκος του πλοίου που χρειαζόμαστε το οποίο δίνεται σε self.AIRCRAFT_CARRIER = 5
+                                                                      self.BATTLESHIP = 4
+                                                                      self.CRUISER = 3
+                                                                      self.DESTROYER = 2
+    sea_image = Η εικόνα που αναπαριστά τη θάλασσα πάνω στο ταμπλό με σκοπό την ανακατασκευή του.
+    ship_color = είναι η εικόνα που θα έχει το κάθε πλοίο που θα τοποθετειται στο ταμπλό.    
+    
+    Μία συνάρτηση η οποία αφαιρει πλοία από το ταμπλό και ταυτόχρονα επαναφέρει το ταμπλό
+    στην κατάσταση που χρειάζεται.
     """
 
     player.remove(length)
@@ -249,6 +318,16 @@ def new_game(window, topwindow, end_window, friend, enemy, default_image_button,
     """
     Συνάρτηση επανέναρξης του παιχνιδιού.
 
+    window = Το κύριο παράθυρο του παιχνιδιού.
+    topwindow = Το παράθυρο το οποίο χρησιμοποιειται για την ονομασία του παιχτη.
+    end_window = Το παράθυρο το οποίο εμφανίζεται με τη λήξη του παιχνιδιού.
+    friend = Το αντικειμενο που περιέχει όλες τις πληροφορίες για τον παίχτη.
+    enemy = Το αντικειμενο που περιέχει όλες τις πληροφορίες για τον εχθρό.
+    default_image_button = Η εικόνα που αναπαριστά τη θάλασσα πάνω στο ταμπλό με σκοπό την ανακατασκευή του
+                           αφορά τα κουμπιά.
+    default_image_label = Η εικόνα που αναπαριστά τη θάλασσα πάνω στο ταμπλό με σκοπό την ανακατασκευή του
+                          αφορά τις ταμπέλες.
+    
     Αρχίζει καινούριο παιχνίδι.
     """
 
@@ -276,8 +355,27 @@ def new_game(window, topwindow, end_window, friend, enemy, default_image_button,
     
 
 def start_game(window, enemy, friend, end_window, enemy_red, enemy_white, friend_red, friend_white, deafult_image, print_ships):
+
     """
     Συνάρτηση η οποία ξεκινάει το παιχνίδι.
+
+    window = Το κύριο παράθυρο του παιχνιδιού.
+    enemy = Το αντικειμενο που περιέχει όλες τις πληροφορίες για τον εχθρό.
+    friend = Το αντικειμενο που περιέχει όλες τις πληροφορίες για τον παίχτη.
+    end_window = Το παράθυρο το οποίο εμφανίζεται με τη λήξη του παιχνιδιού.
+    enemy_red = Το χρώμα που παίρνουν τα κουμπιά σε περίπτωση ύπαρξης εχθρικού πλοίου
+    enemy_white = Το χρώμα που παίρνουν τα κουμπιά σε περίπτωση μη ύπαρξης εχθρικού πλοίου
+    friend_red = Το χρώμα που παίρνουν οι ταμπέλες σε περίπτωση ύπαρξης φίλιου πλοίου
+    friend_white = Το χρώμα που παίρνουν οι ταμπέλες σε περίπτωση μη ύπαρξης φίλιου πλοίου  
+    default_image = Η εικόνα που αναπαριστά τη θάλασσα πάνω στο ταμπλό με σκοπό την ανακατασκευή του
+                    αφορά τα κουμπιά.
+    print_ships = Ειναι μία μεταβλητή η οποία όταν έχει την τιμή True κατασκευάζει στο idle μία αναπαράσταση
+                  με όλες τις πληροφορίες του ταμπλό οι οποίες περιλαμβάνουν: Το εχθρικό ταμπλό
+                                                                              Την εχθρική διάταξη πλοίων
+                                                                              Το φίλιο ταμπλό
+                                                                              Την φίλια διάταξη πλοίων
+                  Η μεταβλητή αυτή έχει βοηθητικό σκοπό για την κατασκευή και την επιβεβαιωση πως η
+                  εφαρμογή δουευει σωστά.
 
     Αυτή η συνάρτηση τοποθετει τα πλοία του εχθρού και κάνει τις
     απαραιτητες ενέργειες για να ξεκινήσουμε τα πυρά.
@@ -287,6 +385,7 @@ def start_game(window, enemy, friend, end_window, enemy_red, enemy_white, friend
     window.nametowidget("frame_ship_input.ship_remove").config(state=DISABLED)
     window.nametowidget("frame_ship_input.start").config(state=DISABLED)
 
+    # Εδώ γίνεται η τυχαια εισαγωγή πλοίων στο ταμπλό του εχθρού.
     list_of_ships = [enemy.AIRCRAFT_CARRIER,
                      enemy.BATTLESHIP,
                      enemy.CRUISER,
@@ -309,6 +408,7 @@ def start_game(window, enemy, friend, end_window, enemy_red, enemy_white, friend
                 break
             list_of_directions.remove(direction)
 
+    # Εκτύπωση πληροφοριών αν ειναι True η μεταβλητή print_ships
     if print_ships:
         ##!!##
         print("-------Εχθρική διάταξη πλοίων-------\n")
@@ -318,8 +418,19 @@ def start_game(window, enemy, friend, end_window, enemy_red, enemy_white, friend
 
 
     def enemy_buttons(x, y, window, enemy, friend, end_window, enemy_red, enemy_white, friend_red, friend_white):
-        """Συνάρτηση η οποία δέχεται τη θέση του κάθε κουμπιού
-           και επιστρέφει διαφορετική εντολή για κάθε κουμπί"""
+
+        """
+        Η συνάρτηση enemy_buttons επιστρέφει μία συνάρτηση
+
+        Τα x και y θα αλλάζουν ανάλογα με τα ορίσματα που θα τις δίνονται.
+        Τα υπόλοιπα ορίσματα παραμένουν σταθερά και τα παιρνει
+        απο τη συνάρτηση start_game.
+
+        Τελικά η συνάρτηση αυτή επιστρέφει μία άλλη συνάρτηση η οποία θα δέχεται
+        όλα τα ορίσματα τις head και θα έχει σταθερά αλλα διαφορετικά για κάθε κλήση
+        της head x και y.
+        """
+        
         def player_choice():
             """
             Συνάρτηση διαφορετική για κάθε κουμπί.
@@ -335,7 +446,9 @@ def start_game(window, enemy, friend, end_window, enemy_red, enemy_white, friend
                 window.nametowidget("score").config(text=f"{Ship.ACTIVE_PLAYER_NAME}: {friend.score}\tCPU: {enemy.score}")
             else:
                 window.nametowidget(f"frame_enemy.enemy{x}{y}").config(state=DISABLED, image=friend_white)
-            
+
+            # Συνάρτηση η οποία εκτελέι τις απαραιτητες ενέργειες για να κάνει τον εχθρό έξυπνο
+            # δηλαδή να επιλέγει την επόμενη κίνησή του ορθά
             enemy_choice(window, friend, enemy, end_window, enemy_red, enemy_white)
 
             if friend.score == 14:
@@ -359,7 +472,22 @@ def start_game(window, enemy, friend, end_window, enemy_red, enemy_white, friend
 
 def enemy_choice(window, friend, enemy, end_window, enemy_red, enemy_white):
 
+    """
+    Συνάρτηση επιλογής επόμενης κίνησης απο τον εχθρό.
 
+    window = Το κύριο παράθυρο του παιχνιδιού.
+    friend = Το αντικειμενο που περιέχει όλες τις πληροφορίες για τον παίχτη.
+    enemy = Το αντικειμενο που περιέχει όλες τις πληροφορίες για τον εχθρό.
+    end_window = Το παράθυρο το οποίο εμφανίζεται με τη λήξη του παιχνιδιού.
+    enemy_red = Το χρώμα που παίρνουν τα κουμπιά σε περίπτωση ύπαρξης εχθρικού πλοίου
+    enemy_white = Το χρώμα που παίρνουν τα κουμπιά σε περίπτωση μη ύπαρξης εχθρικού πλοίου
+
+    Συνάρτηση η οποία εκτελέι τις απαραιτητες ενέργειες για να κάνει τον εχθρό έξυπνο
+    δηλαδή να επιλέγει την επόμενη κίνησή του ορθά. Χρησιμοποιει της συναρτήσεις απο το
+    module Enemy_Algorythm για την επίτευξη του σκοπού του.
+    """
+
+    # Καθυστέρηση της εκτέλεσης κατα 1 δευτερόλεπτο.
     time.sleep(1)
                 
     
@@ -436,6 +564,8 @@ def enemy_choice(window, friend, enemy, end_window, enemy_red, enemy_white):
 def end_game(end_window):
     """
     Μία συνάρτηση η οποία εμφανίζει το παράθυρο του τερματισμού.
+
+    end_window = Το παράθυρο το οποίο εμφανίζεται με τη λήξη του παιχνιδιού.
     """
 
     center_window(end_window)
