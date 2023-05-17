@@ -5,7 +5,7 @@ PRINT_SHIPS = False
 
 
 window = Tk()
-window.title("Ναυμαχία The E-Game")
+window.title("Ναυμαχία The D-Game")
 image = PhotoImage(file="Battleship_icon.png")
 window.iconphoto(True, image)
 window.resizable(False, False)
@@ -32,6 +32,7 @@ grey_image_big = PhotoImage(file="icons\\grey_big.png")
 # Labels
 red_image_label = PhotoImage(file="icons\\red_label.png")
 white_image_label = PhotoImage(file="icons\\white_label.png")
+grey_image_label = PhotoImage(file="icons\\grey_label.png")
 
 # Arrows
 down_arrow = PhotoImage(file="icons\\arrow_down.png")
@@ -101,6 +102,7 @@ start = Button(frame_ship_input, text="Έναρξη παιχνιδιού",
                                           end_game_win,
                                           red_image_label,
                                           white_image_label,
+                                          grey_image_label,
                                           red_image_big,
                                           white_image_big,
                                           sea_image,
@@ -116,14 +118,14 @@ ship_remove.grid(row=0, column=1, padx=10)
 for x in range(10):
     for y in range(11):
         Button(frame_enemy, text=f"{x+1}, {y+1}",
-               command="", image=sea_image, bg="grey",
+               command="", image=sea_image,
                name=f"enemy{x}{y}",).grid(row=x, column=y)
         
 # Δημιουργία και εισαγωγή των ετικετών στο ταμπλό του Παίχτη
 for x in range(10):
     for y in range(11):
         Label(frame_player, text=f"{x+1}, {y+1}",
-              image=sea_image_label, bg="grey",
+              image=sea_image_label,
               name=f"player{x}{y}").grid(row=x, column=y)
 
 

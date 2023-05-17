@@ -178,9 +178,6 @@ def choose_ship_direction(window, topwindow2, player, direction, ship_color):
     # Επιλογή πλοίου.
     # Το current_length ειναι μία μεταβλητή η οποία έχει διμηουργηθεί
     # στη συνάρτηση choose_ship_length
-    topwindow1 = Το παράθυρο το οποίο περιέχει όλα τα διαθέσιμα προς εισαγωγή πλοια
-    topwindow2 = Το παράθυρο το οποίο έχει την επιλογή κατυεύθηνσης
-    player = Το αντικειμενο που περιέχει όλες τις πληροφορίες για τον παίχτη
     if player.current_length == player.AIRCRAFT_CARRIER:
         some_ship = player.aircraft_carrier
     elif player.current_length == player.BATTLESHIP:
@@ -354,7 +351,7 @@ def new_game(window, topwindow, end_window, friend, enemy, default_image_button,
     topwindow.grab_set()
     
 
-def start_game(window, enemy, friend, end_window, enemy_red, enemy_white, friend_red, friend_white, deafult_image, print_ships):
+def start_game(window, enemy, friend, end_window, enemy_red, enemy_white, friend_gray, friend_red, friend_white, deafult_image, print_ships):
 
     """
     Συνάρτηση η οποία ξεκινάει το παιχνίδι.
@@ -365,6 +362,7 @@ def start_game(window, enemy, friend, end_window, enemy_red, enemy_white, friend
     end_window = Το παράθυρο το οποίο εμφανίζεται με τη λήξη του παιχνιδιού.
     enemy_red = Το χρώμα που παίρνουν τα κουμπιά σε περίπτωση ύπαρξης εχθρικού πλοίου
     enemy_white = Το χρώμα που παίρνουν τα κουμπιά σε περίπτωση μη ύπαρξης εχθρικού πλοίου
+    friend_gray = Το χρώμα που παίρνουν οι ταμπέλες για τις αρχικές θέσεις των πλοίων
     friend_red = Το χρώμα που παίρνουν οι ταμπέλες σε περίπτωση ύπαρξης φίλιου πλοίου
     friend_white = Το χρώμα που παίρνουν οι ταμπέλες σε περίπτωση μη ύπαρξης φίλιου πλοίου  
     default_image = Η εικόνα που αναπαριστά τη θάλασσα πάνω στο ταμπλό με σκοπό την ανακατασκευή του
@@ -468,6 +466,8 @@ def start_game(window, enemy, friend, end_window, enemy_red, enemy_white, friend
             window.nametowidget(f"frame_enemy.enemy{x}{y}").config(state=NORMAL,
                                                                    image=deafult_image,
                                                                    command=player_choice)
+            if friend.is_ocupied[x][y] == "*":
+                window.nametowidget(f"frame_player.player{x}{y}").config(image=friend_gray)
                                                                            
 
 def enemy_choice(window, friend, enemy, end_window, enemy_red, enemy_white):
